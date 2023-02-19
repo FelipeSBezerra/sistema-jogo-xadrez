@@ -48,6 +48,9 @@ public class PartidaXadrez {
 		if(!tabuleiro.temUmaPeca(posicao)) {
 			throw new XadrezException("Nao existe peca na posicao de origem");
 		}
+		if(!tabuleiro.peca(posicao).existeMovimentoPossivel()) {
+			throw new XadrezException("Nao ha movimentos possiveis para a peca escolhida");
+		}
 	}
 	
 	// Metodo para colocar uma peca passando as informacoes da coluna e linha do tabuleiro de xadrez
