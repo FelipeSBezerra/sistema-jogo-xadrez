@@ -27,10 +27,15 @@ public class PartidaXadrez {
 		return mat;
 	}
 	
+	// Metodo para colocar uma peca passando as informacoes da coluna e linha do tabuleiro de xadrez
+	public void colocarNovaPeca(char coluna, int linha, PecaXadrez peca) {
+		tabuleiro.colocarPeca(peca, new PosicaoXadrez(coluna, linha).paraPosicao());
+	}
+	
 	//Esse metodo coloca as pecas na configuracao inicial para iniciar a partida
 	public void configuracaoInicial() {
-		tabuleiro.colocarPeca(new Torre(tabuleiro, Cor.PRETA), new Posicao(0, 7));
-		tabuleiro.colocarPeca(new Rei(tabuleiro, Cor.PRETA), new Posicao(0, 4));
-		tabuleiro.colocarPeca(new Rei(tabuleiro, Cor.BRANCA), new Posicao(7, 4));
+		colocarNovaPeca('h', 8, new Torre(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('e', 8, new Rei(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCA));
 	}
 }
