@@ -1,6 +1,5 @@
 package xadrez;
 
-import jogotabuleiro.Posicao;
 import jogotabuleiro.Tabuleiro;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
@@ -37,5 +36,6 @@ public class PartidaXadrez {
 		colocarNovaPeca('h', 8, new Torre(tabuleiro, Cor.PRETA));
 		colocarNovaPeca('e', 8, new Rei(tabuleiro, Cor.PRETA));
 		colocarNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCA));
+		colocarNovaPeca('h', 1, new Torre(tabuleiro, Cor.BRANCA));
 	}
 }
