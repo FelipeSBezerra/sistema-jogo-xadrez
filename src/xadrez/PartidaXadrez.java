@@ -1,6 +1,9 @@
 package xadrez;
 
+import jogotabuleiro.Peca;
+import jogotabuleiro.Posicao;
 import jogotabuleiro.Tabuleiro;
+import jogotabuleiro.TabuleiroException;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
@@ -24,6 +27,27 @@ public class PartidaXadrez {
 			}
 		}
 		return mat;
+	}
+	
+	public PecaXadrez executarJogada(PosicaoXadrez posicaoDeOrigem, PosicaoXadrez posicaoDeDestino) {
+		Posicao origem = posicaoDeOrigem.paraPosicao();
+		Posicao destino = posicaoDeDestino.paraPosicao();
+		validarPosicaoDeOrigem(origem);
+		Peca pecaCapturada = fazerMovimento(origem, destino);
+		return (PecaXadrez) pecaCapturada;
+	}
+	
+	private Peca fazerMovimento(Posicao origem, Posicao destino) {
+		Peca p = tabuleiro.removerPeca(origem);
+		Peca pecaCapturada = tabuleiro.removerPeca(destino);
+		tabuleiro.colocarPeca(p, destino);
+		return pecaCapturada;
+	}
+	
+	private void validarPosicaoDeOrigem(Posicao posicao) {
+		if(!tabuleiro.temUmaPeca(posicao)) {
+			throw new XadrezException("Nao existe peca na posicao de origem");
+		}
 	}
 	
 	// Metodo para colocar uma peca passando as informacoes da coluna e linha do tabuleiro de xadrez
