@@ -8,10 +8,14 @@ import xadrez.pecas.Torre;
 
 public class PartidaXadrez {
 
+	private int turno;
+	private Cor jogadorAtual;
 	private Tabuleiro tabuleiro;
 
 	public PartidaXadrez() {
 		tabuleiro = new Tabuleiro(8, 8);
+		turno = 1;
+		jogadorAtual = Cor.BRANCA;
 		configuracaoInicial();
 	}
 
@@ -29,12 +33,21 @@ public class PartidaXadrez {
 		return mat;
 	}
 
+	public int getTurno() {
+		return turno;
+	}
+
+	public Cor getJogadorAtual() {
+		return jogadorAtual;
+	}
+
 	public PecaXadrez executarJogada(PosicaoXadrez posicaoDeOrigem, PosicaoXadrez posicaoDeDestino) {
 		Posicao origem = posicaoDeOrigem.paraPosicao();
 		Posicao destino = posicaoDeDestino.paraPosicao();
 		validarPosicaoDeOrigem(origem);
 		validarPosicaoDeDestino(origem, destino);
 		Peca pecaCapturada = fazerMovimento(origem, destino);
+		proximoTurno();
 		return (PecaXadrez) pecaCapturada;
 	}
 
@@ -49,6 +62,9 @@ public class PartidaXadrez {
 		if (!tabuleiro.temUmaPeca(posicao)) {
 			throw new XadrezException("Nao existe peca na posicao de origem");
 		}
+		if (jogadorAtual != ((PecaXadrez) tabuleiro.peca(posicao)).getCor()) {
+			throw new XadrezException("A peca escolhida nao e sua");
+		}
 		if (!tabuleiro.peca(posicao).existeMovimentoPossivel()) {
 			throw new XadrezException("Nao ha movimentos possiveis para a peca escolhida");
 		}
@@ -59,8 +75,13 @@ public class PartidaXadrez {
 			throw new XadrezException("A peca escolhida nao pode se mover para a posicao de destino");
 		}
 	}
-	
-	public boolean[][] movimentosPossiveis(PosicaoXadrez posicaoXadrex){
+
+	private void proximoTurno() {
+		turno++;
+		jogadorAtual = (jogadorAtual == Cor.BRANCA) ? Cor.PRETA : Cor.BRANCA;
+	}
+
+	public boolean[][] movimentosPossiveis(PosicaoXadrez posicaoXadrex) {
 		Posicao posicao = posicaoXadrex.paraPosicao();
 		validarPosicaoDeOrigem(posicao);
 		return tabuleiro.peca(posicao).movimentosPossiveis();
@@ -74,9 +95,18 @@ public class PartidaXadrez {
 
 	// Esse metodo coloca as pecas na configuracao inicial para iniciar a partida
 	public void configuracaoInicial() {
-		colocarNovaPeca('h', 8, new Torre(tabuleiro, Cor.PRETA));
-		colocarNovaPeca('e', 8, new Rei(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('d', 1, new Torre(tabuleiro, Cor.BRANCA));
+		colocarNovaPeca('f', 1, new Torre(tabuleiro, Cor.BRANCA));
+		colocarNovaPeca('d', 2, new Torre(tabuleiro, Cor.BRANCA));
+		colocarNovaPeca('e', 2, new Torre(tabuleiro, Cor.BRANCA));
+		colocarNovaPeca('f', 2, new Torre(tabuleiro, Cor.BRANCA));
 		colocarNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCA));
-		colocarNovaPeca('h', 1, new Torre(tabuleiro, Cor.BRANCA));
+		
+		colocarNovaPeca('d', 8, new Torre(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('f', 8, new Torre(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('d', 7, new Torre(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('e', 7, new Torre(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('f', 7, new Torre(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('e', 8, new Rei(tabuleiro, Cor.PRETA));
 	}
 }
