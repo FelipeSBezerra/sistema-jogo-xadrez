@@ -30,11 +30,11 @@ public class UI {
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
 	// https://stackoverflow.com/questions/2979383/java-clear-the-console
-	public static void limparTela() { 
-	 System.out.print("\033[H\033[2J"); 
-	 System.out.flush(); 
+	public static void limparTela() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
 	}
-	
+
 	public static PosicaoXadrez lerPosicaoXadrez(Scanner sc) {
 		try {
 			String aux = sc.next();
@@ -53,17 +53,34 @@ public class UI {
 		for (int i = 0; i < peca.length; i++) {
 			System.out.print((8 - i) + " ");
 			for (int j = 0; j < peca[0].length; j++) {
-				printPeca(peca[i][j]);
+				printPeca(peca[i][j], false);
 			}
 			System.out.println();
 		}
 		System.out.println("  a b c d e f g h");
 	}
 
-	// Metodo para imprimir uma unica peca
-	private static void printPeca(PecaXadrez peca) {
+	// Esse metodo percorre toda matriz de peca de xadrez e imprime cada peca na
+	// tela e seus movimentos possiveis
+	public static void printTabuleiro(PecaXadrez[][] peca, boolean[][] movimentosPossiveis) {
+		System.out.println("======XADREZ=====");
+		for (int i = 0; i < peca.length; i++) {
+			System.out.print((8 - i) + " ");
+			for (int j = 0; j < peca[0].length; j++) {
+				printPeca(peca[i][j], movimentosPossiveis[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.println("  a b c d e f g h");
+	}
+
+	// Metodo para imprimir uma unica peca ou colore o planoDeFundo com um movimento possivel
+	private static void printPeca(PecaXadrez peca, boolean planoDeFundo) {
+		if(planoDeFundo) {
+			System.out.print(ANSI_GREEN_BACKGROUND);
+		}
 		if (peca == null) {
-			System.out.print("-");
+			System.out.print("-" + ANSI_RESET);
 		} else {
 			if (peca.getCor() == Cor.BRANCA) {
 				System.out.print(ANSI_WHITE + peca + ANSI_RESET);

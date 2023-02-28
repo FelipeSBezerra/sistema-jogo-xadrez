@@ -3,7 +3,6 @@ package xadrez;
 import jogotabuleiro.Peca;
 import jogotabuleiro.Posicao;
 import jogotabuleiro.Tabuleiro;
-import jogotabuleiro.TabuleiroException;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
@@ -59,6 +58,12 @@ public class PartidaXadrez {
 		if (!tabuleiro.peca(origem).possivelMover(destino)) {
 			throw new XadrezException("A peca escolhida nao pode se mover para a posicao de destino");
 		}
+	}
+	
+	public boolean[][] movimentosPossiveis(PosicaoXadrez posicaoXadrex){
+		Posicao posicao = posicaoXadrex.paraPosicao();
+		validarPosicaoDeOrigem(posicao);
+		return tabuleiro.peca(posicao).movimentosPossiveis();
 	}
 
 	// Metodo para colocar uma peca passando as informacoes da coluna e linha do
