@@ -1,7 +1,10 @@
 package application;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import xadrez.Cor;
 import xadrez.PartidaXadrez;
@@ -47,13 +50,15 @@ public class UI {
 		}
 	}
 
-	public static void printPartida(PartidaXadrez partidaXadrez) {
+	public static void printPartida(PartidaXadrez partidaXadrez, List<PecaXadrez> capturadas) {
 		printTabuleiro(partidaXadrez.getPecas());
+		System.out.println();
+		printPecasCapturadas(capturadas);
 		System.out.println();
 		System.out.println("Turno: " + partidaXadrez.getTurno());
 		System.out.println("Aguardando jogador de peca: " + partidaXadrez.getJogadorAtual());
 	}
-	
+
 	// Esse metodo percorre toda matriz de peca de xadrez e imprime cada peca na
 	// tela
 	public static void printTabuleiro(PecaXadrez[][] peca) {
@@ -82,9 +87,10 @@ public class UI {
 		System.out.println("  a b c d e f g h");
 	}
 
-	// Metodo para imprimir uma unica peca ou colore o planoDeFundo com um movimento possivel
+	// Metodo para imprimir uma unica peca ou colore o planoDeFundo com um movimento
+	// possivel
 	private static void printPeca(PecaXadrez peca, boolean planoDeFundo) {
-		if(planoDeFundo) {
+		if (planoDeFundo) {
 			System.out.print(ANSI_GREEN_BACKGROUND);
 		}
 		if (peca == null) {
@@ -97,5 +103,22 @@ public class UI {
 			}
 		}
 		System.out.print(" ");
+	}
+
+	private static void printPecasCapturadas(List<PecaXadrez> capturadas) {
+		List<PecaXadrez> brancas = capturadas.stream().filter(x -> x.getCor() == Cor.BRANCA).collect(Collectors.toList());
+		List<PecaXadrez> pretas = capturadas.stream().filter(x -> x.getCor() == Cor.PRETA).collect(Collectors.toList());
+
+		System.out.println("Pecas capturadas:");
+		System.out.print("Brancas: ");
+		System.out.print(ANSI_WHITE);
+		System.out.println(Arrays.toString(brancas.toArray()));
+		System.out.print(ANSI_RESET);
+		System.out.print("Pretas: ");
+		System.out.print(ANSI_YELLOW);
+		System.out.println(Arrays.toString(pretas.toArray()));
+		System.out.print(ANSI_RESET);
+
+
 	}
 }

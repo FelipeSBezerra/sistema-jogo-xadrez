@@ -1,5 +1,8 @@
 package xadrez;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jogotabuleiro.Peca;
 import jogotabuleiro.Posicao;
 import jogotabuleiro.Tabuleiro;
@@ -11,6 +14,8 @@ public class PartidaXadrez {
 	private int turno;
 	private Cor jogadorAtual;
 	private Tabuleiro tabuleiro;
+	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
+	private List<Peca> pecasCapturadas = new ArrayList<>();
 
 	public PartidaXadrez() {
 		tabuleiro = new Tabuleiro(8, 8);
@@ -55,6 +60,10 @@ public class PartidaXadrez {
 		Peca p = tabuleiro.removerPeca(origem);
 		Peca pecaCapturada = tabuleiro.removerPeca(destino);
 		tabuleiro.colocarPeca(p, destino);
+
+		if (pecaCapturada != null) {
+			pecasCapturadas.remove(pecaCapturada);
+		}
 		return pecaCapturada;
 	}
 
@@ -91,6 +100,7 @@ public class PartidaXadrez {
 	// tabuleiro de xadrez
 	public void colocarNovaPeca(char coluna, int linha, PecaXadrez peca) {
 		tabuleiro.colocarPeca(peca, new PosicaoXadrez(coluna, linha).paraPosicao());
+		pecasNoTabuleiro.add(peca);
 	}
 
 	// Esse metodo coloca as pecas na configuracao inicial para iniciar a partida
@@ -101,7 +111,7 @@ public class PartidaXadrez {
 		colocarNovaPeca('e', 2, new Torre(tabuleiro, Cor.BRANCA));
 		colocarNovaPeca('f', 2, new Torre(tabuleiro, Cor.BRANCA));
 		colocarNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCA));
-		
+
 		colocarNovaPeca('d', 8, new Torre(tabuleiro, Cor.PRETA));
 		colocarNovaPeca('f', 8, new Torre(tabuleiro, Cor.PRETA));
 		colocarNovaPeca('d', 7, new Torre(tabuleiro, Cor.PRETA));
