@@ -30,7 +30,7 @@ public class PosicaoXadrez {
 	
 	// Metodo para, a partir de uma posicao de matriz, passar para uma posicao de xadrez
 	protected static PosicaoXadrez daPosicao(Posicao posicao) {
-		return new PosicaoXadrez((char)('a' - posicao.getColuna()), posicao.getLinha() - 8);
+		return new PosicaoXadrez((char)('a' + posicao.getColuna()), 8 - posicao.getLinha());
 	}
 	
 	@Override
