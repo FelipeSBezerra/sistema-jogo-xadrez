@@ -56,20 +56,25 @@ public class UI {
 		printPecasCapturadas(capturadas);
 		System.out.println();
 		System.out.println("Turno: " + partidaXadrez.getTurno());
-		System.out.println("Aguardando jogador de peca: " + partidaXadrez.getJogadorAtual());
-		if (partidaXadrez.getCheck()) {
-			System.out.println("CHECK!");
+		if(!partidaXadrez.getCheckMate()) {
+			System.out.println("Aguardando jogador de peca: " + partidaXadrez.getJogadorAtual());
+			if (partidaXadrez.getCheck()) {
+				System.out.println("CHECK!");
+			}
+		}else {
+			System.out.println("CHECKMATE!");
+			System.out.println("Venceder: " + partidaXadrez.getJogadorAtual());
 		}
 	}
 
 	// Esse metodo percorre toda matriz de peca de xadrez e imprime cada peca na
 	// tela
-	public static void printTabuleiro(PecaXadrez[][] peca) {
+	public static void printTabuleiro(PecaXadrez[][] pecas) {
 		System.out.println("======XADREZ=====");
-		for (int i = 0; i < peca.length; i++) {
+		for (int i = 0; i < pecas.length; i++) {
 			System.out.print((8 - i) + " ");
-			for (int j = 0; j < peca[0].length; j++) {
-				printPeca(peca[i][j], false);
+			for (int j = 0; j < pecas[0].length; j++) {
+				printPeca(pecas[i][j], false);
 			}
 			System.out.println();
 		}
@@ -78,12 +83,12 @@ public class UI {
 
 	// Esse metodo percorre toda matriz de peca de xadrez e imprime cada peca na
 	// tela e seus movimentos possiveis
-	public static void printTabuleiro(PecaXadrez[][] peca, boolean[][] movimentosPossiveis) {
+	public static void printTabuleiro(PecaXadrez[][] pecas, boolean[][] movimentosPossiveis) {
 		System.out.println("======XADREZ=====");
-		for (int i = 0; i < peca.length; i++) {
+		for (int i = 0; i < pecas.length; i++) {
 			System.out.print((8 - i) + " ");
-			for (int j = 0; j < peca[0].length; j++) {
-				printPeca(peca[i][j], movimentosPossiveis[i][j]);
+			for (int j = 0; j < pecas[0].length; j++) {
+				printPeca(pecas[i][j], movimentosPossiveis[i][j]);
 			}
 			System.out.println();
 		}

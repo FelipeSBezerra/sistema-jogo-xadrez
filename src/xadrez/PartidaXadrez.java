@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import jogotabuleiro.Peca;
 import jogotabuleiro.Posicao;
 import jogotabuleiro.Tabuleiro;
-import xadrez.pecas.Peao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
@@ -17,6 +16,7 @@ public class PartidaXadrez {
 	private Cor jogadorAtual;
 	private Tabuleiro tabuleiro;
 	private boolean check;
+	private boolean checkMate;
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
 
@@ -34,7 +34,7 @@ public class PartidaXadrez {
 		PecaXadrez[][] mat = new PecaXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
 
 		for (int i = 0; i < tabuleiro.getLinhas(); i++) {
-			for (int j = 1; j < tabuleiro.getColunas(); j++) {
+			for (int j = 0; j < tabuleiro.getColunas(); j++) {
 				mat[i][j] = (PecaXadrez) tabuleiro.peca(i, j);
 			}
 		}
@@ -52,6 +52,10 @@ public class PartidaXadrez {
 	public boolean getCheck() {
 		return check;
 	}
+	
+	public boolean getCheckMate() {
+		return checkMate;
+	}
 
 	public PecaXadrez executarJogada(PosicaoXadrez posicaoDeOrigem, PosicaoXadrez posicaoDeDestino) {
 		Posicao origem = posicaoDeOrigem.paraPosicao();
@@ -67,7 +71,12 @@ public class PartidaXadrez {
 		
 		check = (testeCheck(oponente(jogadorAtual))) ? true : false;
 		
-		proximoTurno();
+		if(testeCheckMate(oponente(jogadorAtual))){
+			checkMate = true;
+		}else {
+			proximoTurno();
+		}
+		
 		return (PecaXadrez) pecaCapturada;
 	}
 
@@ -138,6 +147,7 @@ public class PartidaXadrez {
 		throw new IllegalStateException("Nao existe o Rei da cor " + cor + "no tabuleiro");
 	}
 	
+	// Metodo que verifica se o Rei esta em CHECK
 	private boolean testeCheck(Cor cor) {
 		Posicao posicaoDoRei = rei(cor).getPosicaoXadrez().paraPosicao();				
 		List<Peca> pecasDoOponente = pecasNoTabuleiro.stream().filter(x -> ((PecaXadrez)x).getCor() == oponente(cor)).collect(Collectors.toList());
@@ -149,6 +159,33 @@ public class PartidaXadrez {
 		}
 		return false;
 	}
+	
+	// Metodo que verifica se existe algum movimento possivel que tire o Rei do CHECK
+	// se nao houver, informa que foi checkmate.
+	private boolean testeCheckMate(Cor cor) {
+		if(!testeCheck(cor)) {
+			return false;
+		}
+		List<Peca> lista = pecasNoTabuleiro.stream().filter(x -> ((PecaXadrez)x).getCor() == cor).collect(Collectors.toList());
+		for(Peca p : lista) {
+			boolean[][] mat = p.movimentosPossiveis();
+			for(int i = 0; i < mat.length; i++) {
+				for(int j = 0; j < mat[0].length; j++) {
+					if(mat[i][j]) {
+						Posicao origem = ((PecaXadrez)p).getPosicaoXadrez().paraPosicao();
+						Posicao destino = new Posicao(i, j);
+						Peca pecaCapturada = fazerMovimento(origem, destino);
+						boolean testeCheck = testeCheck(cor);
+						desfazerMovimento(origem, destino, pecaCapturada);
+						if(!testeCheck) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
 
 	// Metodo para colocar uma peca passando as informacoes da coluna e linha do
 	// tabuleiro de xadrez
@@ -159,18 +196,11 @@ public class PartidaXadrez {
 
 	// Esse metodo coloca as pecas na configuracao inicial para iniciar a partida
 	public void configuracaoInicial() {
+		colocarNovaPeca('h', 7, new Torre(tabuleiro, Cor.BRANCA));
 		colocarNovaPeca('d', 1, new Torre(tabuleiro, Cor.BRANCA));
-		colocarNovaPeca('f', 1, new Torre(tabuleiro, Cor.BRANCA));
-		colocarNovaPeca('d', 2, new Torre(tabuleiro, Cor.BRANCA));
-		colocarNovaPeca('e', 2, new Torre(tabuleiro, Cor.BRANCA));
-		colocarNovaPeca('f', 2, new Torre(tabuleiro, Cor.BRANCA));
 		colocarNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCA));
 
-		colocarNovaPeca('d', 8, new Torre(tabuleiro, Cor.PRETA));
-		colocarNovaPeca('f', 8, new Torre(tabuleiro, Cor.PRETA));
-		colocarNovaPeca('d', 7, new Torre(tabuleiro, Cor.PRETA));
-		colocarNovaPeca('e', 7, new Torre(tabuleiro, Cor.PRETA));
-		colocarNovaPeca('f', 7, new Torre(tabuleiro, Cor.PRETA));
-		colocarNovaPeca('e', 8, new Rei(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('b', 8, new Torre(tabuleiro, Cor.PRETA));
+		colocarNovaPeca('a', 8, new Rei(tabuleiro, Cor.PRETA));
 	}
 }
