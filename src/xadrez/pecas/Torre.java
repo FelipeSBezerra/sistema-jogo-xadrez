@@ -16,7 +16,6 @@ public class Torre extends PecaXadrez {
 		return "T";
 	}
 
-	// logica ainda sera implementada
 	@Override
 	public boolean[][] movimentosPossiveis() {
 		boolean[][] mat = new boolean[getTabuleiro().getLinhas()][getTabuleiro().getColunas()];
