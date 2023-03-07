@@ -39,15 +39,23 @@ public class Program {
 					capturadas.add(pecaCapturada);
 				}
 				
+				if (partidaXadrez.getPromovida() != null) {
+					System.out.print("Escolha a peca para promocao (B/C/D/T): ");
+					String tipo = sc.nextLine().toUpperCase();
+					while (!tipo.equals("B") && !tipo.equals("C") && !tipo.equals("D") && !tipo.equals("T")) {
+						System.out.print("Valor invalido: Escolha a peca para promocao (B/C/D/T): ");
+						tipo = sc.nextLine().toUpperCase();
+					}
+					partidaXadrez.substituirPecaPromovida(tipo);
+				}
+				
 			} catch (XadrezException e) {
 				System.out.println(e.getMessage());
 				System.out.print("Pressione Enter para continuar.");
 				sc.nextLine();
-				sc.nextLine();
 			} catch (InputMismatchException e) {
 				System.out.println(e.getMessage());
 				System.out.print("Pressione Enter para continuar.");
-				sc.nextLine();
 				sc.nextLine();
 			}
 

@@ -42,6 +42,7 @@ public class UI {
 	public static PosicaoXadrez lerPosicaoXadrez(Scanner sc) {
 		try {
 			String aux = sc.next();
+			sc.nextLine();
 			char coluna = aux.charAt(0);
 			int linha = Integer.parseInt(aux.substring(1));
 			return new PosicaoXadrez(coluna, linha);
